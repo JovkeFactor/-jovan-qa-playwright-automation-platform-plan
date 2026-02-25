@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QA Automation Platform — Visual Plan</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      --bg:        #0f1117;
+      --surface:   #1a1d27;
+      --surface2:  #22263a;
+      --border:    #2e3250;
+      --accent:    #6c63ff;
+      --accent2:   #00d4aa;
+      --accent3:   #ff6584;
+      --accent4:   #ffc857;
+      --text:      #e8eaf6;
+      --muted:     #8890b5;
+      --green:     #4caf7d;
+      --red:       #f06b6b;
+      --yellow:    #ffc857;
+      --blue:      #4fa3e0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(15,17,23,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex; align-items: center; gap: 0; overflow-x: auto;
+    }
+    nav a {
+      color: var(--muted); text-decoration: none; font-size: 13px;
+      padding: 0.75rem 0.9rem; white-space: nowrap; transition: color .2s;
+      border-bottom: 2px solid transparent;
+    }
+    nav a:hover { color: var(--text); border-bottom-color: var(--accent); }
+    .nav-brand {
+      font-weight: 700; font-size: 14px; color: var(--accent) !important;
+      margin-right: 1rem; border-bottom: none !important;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1240 50%, #0f1117 100%);
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(108,99,255,0.15) 0%, transparent 70%);
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(108,99,255,0.15);
+      border: 1px solid rgba(108,99,255,0.4);
+      color: var(--accent);
+      font-size: 12px; font-weight: 600;
+      padding: 0.3rem 1rem; border-radius: 999px;
+      margin-bottom: 1.5rem; letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800; line-height: 1.15;
+      background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      color: var(--muted); font-size: 1.1rem; max-width: 620px; margin: 0 auto 2rem;
+    }
+    .hero-pills {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem;
+    }
+    .pill {
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--muted); font-size: 13px; padding: 0.35rem 0.9rem; border-radius: 999px;
+    }
+
+    /* ── LAYOUT ── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+    section { padding: 4rem 0; border-bottom: 1px solid var(--border); }
+    section:last-child { border-bottom: none; }
+    .section-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 0.5rem;
+    }
+    h2 {
+      font-size: 1.8rem; font-weight: 700; margin-bottom: 0.5rem;
+    }
+    h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--text); }
+    .section-desc { color: var(--muted); margin-bottom: 2.5rem; max-width: 650px; }
+
+    /* ── GRID ── */
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.5rem;
+      transition: border-color .2s, transform .2s;
+    }
+    .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .card-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.25rem; margin-bottom: 1rem;
+    }
+    .card h3 { font-size: 1rem; margin-bottom: 0.4rem; }
+    .card p { font-size: 13px; color: var(--muted); }
+    .card .tag {
+      display: inline-block; margin-top: 0.75rem;
+      font-size: 11px; padding: 0.2rem 0.6rem; border-radius: 4px;
+      background: rgba(108,99,255,0.15); color: var(--accent); border: 1px solid rgba(108,99,255,0.3);
+    }
+
+    /* ── MERMAID WRAPPER ── */
+    .diagram-wrap {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 2rem; overflow-x: auto;
+      margin: 1.5rem 0;
+    }
+    .mermaid { display: flex; justify-content: center; }
+
+    /* ── ENV TABLE ── */
+    .env-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;
+      margin-top: 1.5rem;
+    }
+    .env-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.5rem;
+    }
+    .env-card.staging { border-top: 3px solid var(--blue); }
+    .env-card.production { border-top: 3px solid var(--accent3); }
+    .env-title {
+      font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .env-card.staging .env-title { color: var(--blue); }
+    .env-card.production .env-title { color: var(--accent3); }
+    .env-row {
+      display: flex; align-items: flex-start; gap: 0.6rem;
+      font-size: 13px; padding: 0.4rem 0; border-bottom: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .env-row:last-child { border-bottom: none; }
+    .env-row .dot {
+      width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 5px;
+    }
+    .dot-green { background: var(--green); }
+    .dot-red   { background: var(--red); }
+    .dot-yellow { background: var(--yellow); }
+
+    /* ── TRIGGER FLOW ── */
+    .trigger-flow {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .trigger-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.25rem; text-align: center;
+      position: relative;
+    }
+    .trigger-card::after {
+      content: '→';
+      position: absolute; right: -0.75rem; top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent); font-size: 1.2rem; z-index: 2;
+    }
+    .trigger-card:last-child::after { content: ''; }
+    .trigger-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .trigger-card h4 { font-size: 0.9rem; margin-bottom: 0.3rem; }
+    .trigger-card p { font-size: 12px; color: var(--muted); }
+
+    /* ── DASHBOARD COMPARISON ── */
+    .dash-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+    .dash-table th {
+      background: var(--surface2); color: var(--muted);
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em;
+      padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--border);
+    }
+    .dash-table td {
+      padding: 0.75rem 1rem; border-bottom: 1px solid var(--border);
+      font-size: 13px; vertical-align: middle;
+    }
+    .dash-table tr:last-child td { border-bottom: none; }
+    .dash-table tr:hover td { background: var(--surface2); }
+    .badge {
+      display: inline-block; font-size: 11px; padding: 0.15rem 0.55rem;
+      border-radius: 4px; font-weight: 600;
+    }
+    .badge-green  { background: rgba(76,175,125,0.15); color: var(--green); }
+    .badge-yellow { background: rgba(255,200,87,0.15);  color: var(--yellow); }
+    .badge-red    { background: rgba(240,107,107,0.15); color: var(--red); }
+    .badge-blue   { background: rgba(79,163,224,0.15);  color: var(--blue); }
+    .badge-accent { background: rgba(108,99,255,0.15);  color: var(--accent); }
+    .recommended-row td { background: rgba(108,99,255,0.06) !important; }
+
+    /* ── AI CARDS ── */
+    .ai-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .ai-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.25rem;
+      border-left: 3px solid var(--accent);
+    }
+    .ai-card h4 { font-size: 0.9rem; margin-bottom: 0.4rem; }
+    .ai-card p  { font-size: 12px; color: var(--muted); }
+    .ai-model-row {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .ai-model {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 1.25rem; display: flex; gap: 1rem; align-items: flex-start;
+    }
+    .ai-model-icon {
+      width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+    }
+
+    /* ── ROADMAP ── */
+    .roadmap {
+      position: relative; padding-left: 2rem; margin: 1.5rem 0;
+    }
+    .roadmap::before {
+      content: ''; position: absolute; left: 8px; top: 0; bottom: 0;
+      width: 2px; background: linear-gradient(to bottom, var(--accent), var(--accent2));
+    }
+    .roadmap-phase {
+      position: relative; margin-bottom: 2.5rem;
+    }
+    .roadmap-phase::before {
+      content: ''; position: absolute; left: -1.75rem; top: 0.35rem;
+      width: 12px; height: 12px; border-radius: 50%;
+      border: 2px solid var(--accent); background: var(--bg);
+    }
+    .phase-header {
+      display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;
+    }
+    .phase-number {
+      background: rgba(108,99,255,0.2); color: var(--accent); border: 1px solid rgba(108,99,255,0.4);
+      font-size: 11px; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 4px;
+    }
+    .phase-effort {
+      font-size: 12px; color: var(--muted);
+      background: var(--surface2); padding: 0.2rem 0.6rem; border-radius: 4px;
+    }
+    .phase-items {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+    }
+    .phase-item {
+      background: var(--surface); border: 1px solid var(--border);
+      font-size: 12px; color: var(--muted);
+      padding: 0.3rem 0.75rem; border-radius: 6px;
+    }
+
+    /* ── STACK GRID ── */
+    .stack-section {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;
+    }
+    .stack-section h4 {
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--accent2); margin-bottom: 1rem; padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .stack-items { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .stack-item {
+      background: var(--surface2); border: 1px solid var(--border);
+      font-size: 12px; padding: 0.3rem 0.8rem; border-radius: 6px; color: var(--text);
+    }
+
+    /* ── DECISIONS ── */
+    .decision-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;
+    }
+    .decision-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.25rem;
+    }
+    .decision-num {
+      font-size: 11px; color: var(--accent); font-weight: 700; margin-bottom: 0.5rem;
+    }
+    .decision-q { font-size: 13px; font-weight: 600; margin-bottom: 0.75rem; }
+    .decision-rec {
+      background: rgba(0,212,170,0.1); border: 1px solid rgba(0,212,170,0.3);
+      color: var(--accent2); font-size: 12px; padding: 0.4rem 0.75rem; border-radius: 6px;
+    }
+    .decision-rec span { font-weight: 600; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center; padding: 3rem 2rem;
+      color: var(--muted); font-size: 13px;
+      border-top: 1px solid var(--border);
+    }
+    footer strong { color: var(--accent); }
+
+    @media (max-width: 640px) {
+      .env-grid { grid-template-columns: 1fr; }
+      .trigger-card::after { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-brand">QA Platform</a>
+  <a href="#architecture">Architecture</a>
+  <a href="#components">Components</a>
+  <a href="#environments">Environments</a>
+  <a href="#triggers">Triggers</a>
+  <a href="#jira">Jira</a>
+  <a href="#dashboard">Dashboard</a>
+  <a href="#ai">AI</a>
+  <a href="#stack">Tech Stack</a>
+  <a href="#roadmap">Roadmap</a>
+  <a href="#decisions">Decisions</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="hero">
+  <div class="hero-badge">QA Automation Platform Plan — 2026</div>
+  <h1>Playwright + AI + Dashboard<br/>Jira + Bitbucket</h1>
+  <p>Multi-app, multi-environment test automation platform for Staging &amp; Production — built around Playwright, Claude AI, and OSS tooling.</p>
+  <div class="hero-pills">
+    <span class="pill">🎭 Playwright</span>
+    <span class="pill">🤖 Claude Sonnet / Opus</span>
+    <span class="pill">🔵 Bitbucket Pipelines</span>
+    <span class="pill">🔴 Jira Cloud</span>
+    <span class="pill">📊 Grafana / ReportPortal</span>
+    <span class="pill">🛢 PostgreSQL</span>
+    <span class="pill">🌐 Staging + Production</span>
+    <span class="pill">🌙 Nightly Cron</span>
+  </div>
+</div>
+
+<!-- ARCHITECTURE -->
+<section id="architecture">
+  <div class="container">
+    <div class="section-label">02 — Architecture</div>
+    <h2>High-Level Architecture</h2>
+    <p class="section-desc">End-to-end flow from multi-shop applications through test execution, AI analysis, results storage, dashboard visualisation, and Jira/Slack integrations.</p>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart TB
+    subgraph APPS["🛍️  Applications — Per App / Per Shop"]
+        APP1["Shop A\n(Staging + Production)"]
+        APP2["Shop B\n(Staging + Production)"]
+        APP3["Shop N\n(Staging + Production)"]
+    end
+    subgraph TRIGGERS["⚡  Test Triggers"]
+        PIPE["Bitbucket Pipelines\n(On Deploy / PR)"]
+        SCHED["Nightly Cron\n(02:00 UTC)"]
+        DASH_TRIG["Manual Trigger\nvia Dashboard"]
+    end
+    subgraph RUNNER["🎭  Execution Layer"]
+        PW["Playwright Runner\n(Per App / Per Env)"]
+        AI_LAYER["Claude AI\n(Triage + Generation)"]
+    end
+    subgraph RESULTS["📊  Results & Reporting"]
+        DB[("PostgreSQL\nResults DB")]
+        GRAFANA["Grafana / ReportPortal\nDashboard"]
+        REPORTS["HTML / Allure Reports"]
+    end
+    subgraph INTEGRATIONS["🔌  Integrations"]
+        JIRA["Jira Cloud\n(Auto Bug Creation)"]
+        NOTIFY["Slack / Email\nNotifications"]
+    end
+    APPS --> TRIGGERS
+    TRIGGERS --> PW
+    PW --> AI_LAYER
+    AI_LAYER --> RESULTS
+    PW --> RESULTS
+    DB --> GRAFANA
+    RESULTS --> JIRA
+    RESULTS --> NOTIFY
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPONENTS -->
+<section id="components">
+  <div class="container">
+    <div class="section-label">03 — Components</div>
+    <h2>Platform Components</h2>
+    <p class="section-desc">Every layer of the platform and the tooling that powers it.</p>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-icon" style="background:rgba(108,99,255,0.15)">🎭</div>
+        <h3>Test Runner</h3>
+        <p>Execute Playwright tests per app and environment. TypeScript, Page Object Model, parallel execution.</p>
+        <span class="tag">Playwright</span>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(0,212,170,0.15)">📝</div>
+        <h3>Test Reporter</h3>
+        <p>Persist results as JSON, generate HTML reports, push to PostgreSQL for historical trends.</p>
+        <span class="tag">Allure + Custom Reporter</span>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(79,163,224,0.15)">🛢</div>
+        <h3>Results Store</h3>
+        <p>All run data, failure details, AI summaries, and trends stored for querying and visualisation.</p>
+        <span class="tag">PostgreSQL</span>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(255,200,87,0.15)">📊</div>
+        <h3>Dashboard</h3>
+        <p>Visualise results across all apps and environments. Pass/fail trends, flaky tests, run history.</p>
+        <span class="tag">Grafana → ReportPortal</span>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(240,107,107,0.15)">🔁</div>
+        <h3>CI/CD</h3>
+        <p>Trigger tests automatically on deploy events, PRs, nightly cron, or manually via dashboard.</p>
+        <span class="tag">Bitbucket Pipelines</span>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(255,101,132,0.15)">🔴</div>
+        <h3>Jira Connector</h3>
+        <p>Auto-creates or updates Jira bugs on failure. Attaches screenshot, trace, video, and AI summary.</p>
+        <span class="tag">Jira Cloud REST API v3</span>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(108,99,255,0.2)">🤖</div>
+        <h3>AI Engine</h3>
+        <p>Failure triage, self-healing locators, test generation from Jira tickets, flakiness detection.</p>
+        <span class="tag">Claude Sonnet + Opus</span>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(0,212,170,0.15)">🔔</div>
+        <h3>Notifications</h3>
+        <p>Run summaries and critical failure alerts delivered immediately to your team.</p>
+        <span class="tag">Slack + Email</span>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(255,200,87,0.15)">📁</div>
+        <h3>Artifact Storage</h3>
+        <p>Screenshots, videos, Playwright traces stored per run for post-mortem debugging.</p>
+        <span class="tag">Bitbucket Artifacts / S3</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ENVIRONMENTS -->
+<section id="environments">
+  <div class="container">
+    <div class="section-label">05 — Environments</div>
+    <h2>Staging vs Production Strategy</h2>
+    <p class="section-desc">Different test suites, frequencies, and policies per environment. Production is always read-only — no destructive actions.</p>
+    <div class="env-grid">
+      <div class="env-card staging">
+        <div class="env-title">🔵 Staging Environment</div>
+        <div class="env-row"><span class="dot dot-green"></span>Full regression — every deploy + nightly</div>
+        <div class="env-row"><span class="dot dot-green"></span>Smoke tests — every deploy</div>
+        <div class="env-row"><span class="dot dot-green"></span>Critical path — nightly</div>
+        <div class="env-row"><span class="dot dot-green"></span>Dedicated test accounts + seed data</div>
+        <div class="env-row"><span class="dot dot-yellow"></span>2 retries per test</div>
+        <div class="env-row"><span class="dot dot-yellow"></span>Failure alert level: Warning</div>
+      </div>
+      <div class="env-card production">
+        <div class="env-title">🔴 Production Environment</div>
+        <div class="env-row"><span class="dot dot-red"></span>Full regression — NOT run (too risky)</div>
+        <div class="env-row"><span class="dot dot-green"></span>Smoke tests — after every production deploy</div>
+        <div class="env-row"><span class="dot dot-green"></span>Critical path — nightly (read-only flows only)</div>
+        <div class="env-row"><span class="dot dot-red"></span>No writes, no test data mutation</div>
+        <div class="env-row"><span class="dot dot-yellow"></span>1 retry per test (reduce noise)</div>
+        <div class="env-row"><span class="dot dot-red"></span>Failure alert level: Critical — immediate</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRIGGERS -->
+<section id="triggers">
+  <div class="container">
+    <div class="section-label">06 — Triggers</div>
+    <h2>Test Execution Triggers</h2>
+    <p class="section-desc">Four ways tests get started — automated on deploy, scheduled nightly, or manually from the dashboard.</p>
+    <div class="trigger-flow">
+      <div class="trigger-card">
+        <div class="trigger-icon">🚀</div>
+        <h4>Deploy to Staging</h4>
+        <p>Bitbucket Pipeline branch/tag event → Smoke + Regression for that app</p>
+      </div>
+      <div class="trigger-card">
+        <div class="trigger-icon">🔴</div>
+        <h4>Deploy to Production</h4>
+        <p>Bitbucket Pipeline tag event → Smoke + Critical Path, production env only</p>
+      </div>
+      <div class="trigger-card">
+        <div class="trigger-icon">🌙</div>
+        <h4>Nightly Cron</h4>
+        <p>02:00 UTC daily → All apps, all environments, full suite</p>
+      </div>
+      <div class="trigger-card">
+        <div class="trigger-icon">🖱️</div>
+        <h4>Manual Trigger</h4>
+        <p>Dashboard "Run Now" → select app, env, suite on demand</p>
+      </div>
+    </div>
+    <div class="diagram-wrap" style="margin-top:1.5rem">
+      <div class="mermaid">
+flowchart LR
+    T1["🚀 Deploy to Staging\n(Bitbucket branch event)"] -->|"APP=shop-a\nENV=staging\nSUITE=smoke+regression"| RUN
+    T2["🔴 Deploy to Production\n(Bitbucket tag event)"] -->|"APP=shop-a\nENV=production\nSUITE=smoke"| RUN
+    T3["🌙 Nightly Cron\n02:00 UTC"] -->|"ALL apps\nALL envs\nFull suite"| RUN
+    T4["🖱️ Manual Trigger\nDashboard UI"] -->|"Select app\nenv, suite"| RUN
+    RUN["🎭 Playwright Runner"] --> RESULTS["📊 Results + Reports"]
+      </div>
+    </div>
+
+    <h3 style="margin-top:2rem">Nightly Execution Schedule</h3>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+gantt
+    title Nightly Run — 02:00 UTC
+    dateFormat HH:mm
+    section Staging
+    Shop A — Full Regression   :02:00, 30m
+    Shop B — Full Regression   :02:30, 30m
+    Shop N — Full Regression   :03:00, 30m
+    section Production
+    Shop A — Critical Path     :03:30, 15m
+    Shop B — Critical Path     :03:45, 15m
+    Shop N — Critical Path     :04:00, 15m
+    section Reporting
+    Push results to DB         :04:15, 5m
+    Send Slack summary         :04:20, 2m
+    Create Jira tickets        :04:22, 3m
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JIRA -->
+<section id="jira">
+  <div class="container">
+    <div class="section-label">08 — Jira Integration</div>
+    <h2>Jira Cloud — Auto Bug Flow</h2>
+    <p class="section-desc">Every test failure either creates a new Jira bug or updates the existing open one — with full context attached automatically.</p>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart TD
+    FAIL["❌ Test Fails"] --> CHECK["🔍 Does open bug exist\nfor this test?"]
+    CHECK -->|"Yes — already tracked"| COMMENT["💬 Add comment with\nnew trace + screenshot"]
+    CHECK -->|"No — first failure"| CREATE["🐛 Create new Jira Bug"]
+    CREATE --> ATTACH["📎 Attach: screenshot,\ntrace.zip, video.webm"]
+    CREATE --> LABEL["🏷️ Labels: auto-qa, shop-a,\nenv-staging / env-production"]
+    CREATE --> AI_SUM["🤖 AI Summary:\nroot cause + selector suggestion"]
+    COMMENT --> DONE["✅ Done"]
+    AI_SUM --> DONE
+      </div>
+    </div>
+    <div class="grid-2" style="margin-top:1.5rem">
+      <div class="card">
+        <h3>Auto-created Bug Fields</h3>
+        <div style="font-family:monospace;font-size:12px;color:var(--muted);margin-top:0.5rem;line-height:2">
+          <div><span style="color:var(--accent2)">Summary:</span> [AUTO-QA][Shop A][Staging] Checkout fails</div>
+          <div><span style="color:var(--accent2)">Priority:</span> High (production) / Medium (staging)</div>
+          <div><span style="color:var(--accent2)">Labels:</span> auto-qa, shop-a, staging, playwright</div>
+          <div><span style="color:var(--accent2)">Component:</span> QA Automation</div>
+          <div><span style="color:var(--accent2)">Attachments:</span> screenshot + trace + video</div>
+          <div><span style="color:var(--accent2)">AI Analysis:</span> root cause + fix suggestion</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Setup Checklist</h3>
+        <div style="font-size:13px;color:var(--muted);line-height:2;margin-top:0.5rem">
+          <div>☑ Create dedicated Jira service account</div>
+          <div>☑ Generate API token at id.atlassian.com</div>
+          <div>☑ Create AUTOQA project (or use existing)</div>
+          <div>☑ Set JIRA_API_TOKEN in Bitbucket variables</div>
+          <div>☑ Configure labels per app + environment</div>
+          <div>☐ Optional: Xray or Zephyr for test cases</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD -->
+<section id="dashboard">
+  <div class="container">
+    <div class="section-label">09 — Dashboard</div>
+    <h2>Dashboard Options Compared</h2>
+    <p class="section-desc">Four options evaluated — from zero-effort OSS tools to a fully custom app. Recommended path: Grafana → ReportPortal → Custom layer.</p>
+
+    <table class="dash-table">
+      <thead>
+        <tr>
+          <th>Option</th>
+          <th>Cost</th>
+          <th>QA-Specific</th>
+          <th>Manual Trigger</th>
+          <th>Setup Effort</th>
+          <th>Phase</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="recommended-row">
+          <td><strong>Grafana</strong> <span class="badge badge-accent" style="margin-left:0.4rem">Phase 1</span></td>
+          <td><span class="badge badge-green">Free OSS</span></td>
+          <td><span class="badge badge-yellow">Generic metrics</span></td>
+          <td><span class="badge badge-red">No</span></td>
+          <td><span class="badge badge-green">Low — 1 Docker container</span></td>
+          <td>1</td>
+        </tr>
+        <tr class="recommended-row">
+          <td><strong>ReportPortal</strong> <span class="badge badge-accent" style="margin-left:0.4rem">Phase 2</span></td>
+          <td><span class="badge badge-green">Free OSS</span></td>
+          <td><span class="badge badge-green">Built for test results</span></td>
+          <td><span class="badge badge-red">No</span></td>
+          <td><span class="badge badge-yellow">Medium — Docker Compose</span></td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td><strong>Metabase</strong></td>
+          <td><span class="badge badge-green">Free community</span></td>
+          <td><span class="badge badge-yellow">Generic BI</span></td>
+          <td><span class="badge badge-red">No</span></td>
+          <td><span class="badge badge-green">Low — 1 Docker container</span></td>
+          <td>Alt</td>
+        </tr>
+        <tr>
+          <td><strong>Custom Dashboard</strong></td>
+          <td><span class="badge badge-yellow">Dev time only</span></td>
+          <td><span class="badge badge-green">Fully tailored</span></td>
+          <td><span class="badge badge-green">Yes — Run Now button</span></td>
+          <td><span class="badge badge-red">High — build from scratch</span></td>
+          <td>3</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="grid-2" style="margin-top:1.5rem">
+      <div class="card">
+        <div class="card-icon" style="background:rgba(255,200,87,0.15)">📊</div>
+        <h3>Grafana — What to show</h3>
+        <div style="font-size:13px;color:var(--muted);margin-top:0.5rem;line-height:1.9">
+          <div>• Pass/Fail rate per app — time series bar chart</div>
+          <div>• Pass/Fail per environment — grouped bar</div>
+          <div>• Failure heatmap (test × app × day)</div>
+          <div>• Flaky tests leaderboard — table</div>
+          <div>• Last run status per app — stat panel</div>
+          <div>• Run duration trends — line chart</div>
+          <div>• AI-flagged failures — table</div>
+          <div>• Jira tickets auto-created — counter</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(0,212,170,0.15)">🔬</div>
+        <h3>ReportPortal — Extra QA features</h3>
+        <div style="font-size:13px;color:var(--muted);margin-top:0.5rem;line-height:1.9">
+          <div>• Groups same failures across multiple runs</div>
+          <div>• Launch comparison: this run vs last week</div>
+          <div>• Built-in AI auto-analysis (ML-based)</div>
+          <div>• Multiple projects = multiple shops natively</div>
+          <div>• Defect types: product bug / automation bug / no defect</div>
+          <div>• Native Playwright reporter plugin available</div>
+          <div>• Test history per individual test case</div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:1rem; border-left: 3px solid var(--accent3)">
+      <h3>Custom Dashboard — Only justified for these features</h3>
+      <div class="grid-4" style="margin-top:0.75rem">
+        <div style="font-size:13px;color:var(--muted)">
+          <div style="color:var(--text);font-weight:600;margin-bottom:0.3rem">🖱️ Run Now</div>
+          Trigger app/env/suite via Bitbucket API from the browser
+        </div>
+        <div style="font-size:13px;color:var(--muted)">
+          <div style="color:var(--text);font-weight:600;margin-bottom:0.3rem">🔍 Drill-down</div>
+          Click failure → embedded Playwright HTML report opens inline
+        </div>
+        <div style="font-size:13px;color:var(--muted)">
+          <div style="color:var(--text);font-weight:600;margin-bottom:0.3rem">🐛 Open in Jira</div>
+          One-click link from failure to auto-created Jira bug
+        </div>
+        <div style="font-size:13px;color:var(--muted)">
+          <div style="color:var(--text);font-weight:600;margin-bottom:0.3rem">🤖 AI Chat</div>
+          Ask "Why did Shop A fail last night?" → Claude answers
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI -->
+<section id="ai">
+  <div class="container">
+    <div class="section-label">11 — AI Integration</div>
+    <h2>AI Integration Points</h2>
+    <p class="section-desc">Claude powers five distinct QA assistance workflows — from automated triage on every failure to on-demand test generation from Jira tickets.</p>
+
+    <div class="ai-grid">
+      <div class="ai-card">
+        <h4>🔍 Failure Triage</h4>
+        <p>After every failure, Claude reads the error, screenshot, trace, and DOM snapshot to suggest the root cause and a fix. Runs automatically via Claude Sonnet.</p>
+      </div>
+      <div class="ai-card">
+        <h4>🔗 Self-Healing Locators</h4>
+        <p>When a locator is not found, Claude compares the old selector to the current DOM and suggests a new selector. Triggers on TimeoutError.</p>
+      </div>
+      <div class="ai-card">
+        <h4>✍️ Test Generation</h4>
+        <p>Given a Jira ticket URL or user story text, Claude Opus generates a full Playwright test scaffold with page objects and assertions.</p>
+      </div>
+      <div class="ai-card">
+        <h4>📉 Flakiness Detection</h4>
+        <p>Nightly analysis of historical results DB. Claude identifies tests that frequently pass on retry, clusters the patterns, and reports root causes.</p>
+      </div>
+      <div class="ai-card">
+        <h4>💬 NL Dashboard Query</h4>
+        <p>Ask in plain English: "Which tests failed most in Shop B this week?" Claude queries the results DB and returns a human-readable answer.</p>
+      </div>
+    </div>
+
+    <h3 style="margin-top:2rem">Model Selection Strategy</h3>
+    <div class="ai-model-row">
+      <div class="ai-model">
+        <div class="ai-model-icon" style="background:rgba(108,99,255,0.15)">⚡</div>
+        <div>
+          <div style="font-weight:600;margin-bottom:0.3rem">Claude Sonnet 4.5</div>
+          <div style="font-size:12px;color:var(--muted)">Day-to-day triage, self-healing locators, flakiness analysis. Runs on <strong style="color:var(--text)">every failure</strong> automatically. Best cost/performance ratio.</div>
+        </div>
+      </div>
+      <div class="ai-model">
+        <div class="ai-model-icon" style="background:rgba(0,212,170,0.15)">🧠</div>
+        <div>
+          <div style="font-weight:600;margin-bottom:0.3rem">Claude Opus 4</div>
+          <div style="font-size:12px;color:var(--muted)">Complex test generation from Jira specs, deep root cause reasoning. <strong style="color:var(--text)">On-demand only</strong> — triggered manually to control cost.</div>
+        </div>
+      </div>
+      <div class="ai-model">
+        <div class="ai-model-icon" style="background:rgba(255,200,87,0.15)">🏃</div>
+        <div>
+          <div style="font-weight:600;margin-bottom:0.3rem">Claude Haiku</div>
+          <div style="font-size:12px;color:var(--muted)">High-volume lightweight tasks at scale — classifying error types across hundreds of results. Cheapest option.</div>
+        </div>
+      </div>
+      <div class="ai-model">
+        <div class="ai-model-icon" style="background:rgba(240,107,107,0.15)">🏠</div>
+        <div>
+          <div style="font-weight:600;margin-bottom:0.3rem">Ollama + Llama 3</div>
+          <div style="font-size:12px;color:var(--muted)">Self-hosted, free. Only if test data (screenshots, DOM) is sensitive and <strong style="color:var(--text)">cannot leave the network</strong>.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section id="stack">
+  <div class="container">
+    <div class="section-label">12 — Tech Stack</div>
+    <h2>Full Tech Stack</h2>
+    <p class="section-desc">All chosen tools are open-source or have a free tier. Infrastructure is minimal — a single small VPS runs everything.</p>
+    <div class="grid-2">
+      <div>
+        <div class="stack-section">
+          <h4>🎭 Test Layer</h4>
+          <div class="stack-items">
+            <span class="stack-item">Playwright (TypeScript)</span>
+            <span class="stack-item">@playwright/test</span>
+            <span class="stack-item">Allure Reporter</span>
+            <span class="stack-item">Custom DB Reporter</span>
+            <span class="stack-item">Page Object Model</span>
+          </div>
+        </div>
+        <div class="stack-section">
+          <h4>🔁 CI/CD</h4>
+          <div class="stack-items">
+            <span class="stack-item">Bitbucket Pipelines</span>
+            <span class="stack-item">mcr.microsoft.com/playwright</span>
+            <span class="stack-item">Bitbucket Schedules (cron)</span>
+            <span class="stack-item">Bitbucket Pipeline API</span>
+          </div>
+        </div>
+        <div class="stack-section">
+          <h4>🛢 Storage</h4>
+          <div class="stack-items">
+            <span class="stack-item">PostgreSQL</span>
+            <span class="stack-item">Bitbucket Artifacts</span>
+            <span class="stack-item">S3 / Object Storage (optional)</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="stack-section">
+          <h4>📊 Dashboard</h4>
+          <div class="stack-items">
+            <span class="stack-item">Phase 1: Grafana OSS</span>
+            <span class="stack-item">Phase 2: ReportPortal OSS</span>
+            <span class="stack-item">Phase 3: Custom Node.js + React</span>
+          </div>
+        </div>
+        <div class="stack-section">
+          <h4>🔌 Integrations</h4>
+          <div class="stack-items">
+            <span class="stack-item">Jira Cloud REST API v3</span>
+            <span class="stack-item">Slack Webhooks</span>
+            <span class="stack-item">Anthropic API</span>
+            <span class="stack-item">Claude Sonnet + Opus</span>
+          </div>
+        </div>
+        <div class="stack-section">
+          <h4>🖥️ Hosting (1 VPS, ~€15/mo)</h4>
+          <div class="stack-items">
+            <span class="stack-item">PostgreSQL container</span>
+            <span class="stack-item">Grafana container</span>
+            <span class="stack-item">ReportPortal (Phase 2)</span>
+            <span class="stack-item">Custom API (Phase 3)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap">
+  <div class="container">
+    <div class="section-label">13 — Roadmap</div>
+    <h2>Phased Implementation Roadmap</h2>
+    <p class="section-desc">Five phases from first Playwright test to full AI-assisted QA platform. Each phase is independently valuable and deliverable.</p>
+
+    <div class="diagram-wrap">
+      <div class="mermaid">
+gantt
+    title QA Automation Platform — Implementation Roadmap
+    dateFormat YYYY-MM-DD
+    section Phase 1 — Foundation
+    Mono-repo structure + 1 shop            :2026-03-01, 14d
+    Playwright config staging + prod        :2026-03-01, 7d
+    Bitbucket Pipeline on-deploy trigger    :2026-03-08, 7d
+    Nightly cron pipeline                   :2026-03-10, 5d
+    section Phase 2 — Reporting
+    PostgreSQL results DB schema            :2026-03-15, 7d
+    Custom DB reporter                      :2026-03-15, 7d
+    Grafana setup + dashboards              :2026-03-22, 7d
+    section Phase 3 — Integrations
+    Jira Cloud auto-bug reporter            :2026-04-01, 10d
+    Slack + Email notifications             :2026-04-05, 5d
+    section Phase 4 — Scale
+    All shops onboarded                     :2026-04-15, 14d
+    ReportPortal evaluation                 :2026-04-20, 10d
+    section Phase 5 — AI
+    AI failure triage  Claude Sonnet        :2026-05-01, 14d
+    AI test generation Claude Opus          :2026-05-15, 14d
+    Flakiness detection                     :2026-06-01, 14d
+      </div>
+    </div>
+
+    <div class="roadmap" style="margin-top:2.5rem">
+      <div class="roadmap-phase">
+        <div class="phase-header">
+          <span class="phase-number">PHASE 1</span>
+          <strong>Foundation</strong>
+          <span class="phase-effort">~2 weeks</span>
+        </div>
+        <div class="phase-items">
+          <span class="phase-item">Playwright mono-repo</span>
+          <span class="phase-item">1 shop setup</span>
+          <span class="phase-item">Staging + Production config</span>
+          <span class="phase-item">Bitbucket on-deploy trigger</span>
+          <span class="phase-item">Nightly cron pipeline</span>
+        </div>
+      </div>
+      <div class="roadmap-phase">
+        <div class="phase-header">
+          <span class="phase-number">PHASE 2</span>
+          <strong>Reporting</strong>
+          <span class="phase-effort">~2 weeks</span>
+        </div>
+        <div class="phase-items">
+          <span class="phase-item">PostgreSQL results DB</span>
+          <span class="phase-item">Custom DB reporter</span>
+          <span class="phase-item">Grafana dashboard</span>
+          <span class="phase-item">Allure HTML reports</span>
+        </div>
+      </div>
+      <div class="roadmap-phase">
+        <div class="phase-header">
+          <span class="phase-number">PHASE 3</span>
+          <strong>Integrations</strong>
+          <span class="phase-effort">~1.5 weeks</span>
+        </div>
+        <div class="phase-items">
+          <span class="phase-item">Jira auto-bug creation</span>
+          <span class="phase-item">Slack notifications</span>
+          <span class="phase-item">Email summary</span>
+        </div>
+      </div>
+      <div class="roadmap-phase">
+        <div class="phase-header">
+          <span class="phase-number">PHASE 4</span>
+          <strong>Scale</strong>
+          <span class="phase-effort">~2 weeks</span>
+        </div>
+        <div class="phase-items">
+          <span class="phase-item">All shops onboarded</span>
+          <span class="phase-item">ReportPortal evaluation</span>
+          <span class="phase-item">Manual trigger from dashboard</span>
+        </div>
+      </div>
+      <div class="roadmap-phase">
+        <div class="phase-header">
+          <span class="phase-number">PHASE 5</span>
+          <strong>AI</strong>
+          <span class="phase-effort">~4 weeks</span>
+        </div>
+        <div class="phase-items">
+          <span class="phase-item">Claude Sonnet failure triage</span>
+          <span class="phase-item">Self-healing locators</span>
+          <span class="phase-item">Claude Opus test generation</span>
+          <span class="phase-item">Flakiness detection</span>
+          <span class="phase-item">NL dashboard query</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DECISIONS -->
+<section id="decisions">
+  <div class="container">
+    <div class="section-label">14 — Open Decisions</div>
+    <h2>Open Questions &amp; Decisions</h2>
+    <p class="section-desc">Key choices to align on before Phase 1 begins. Recommendations are pre-filled but open for discussion.</p>
+    <div class="decision-grid">
+      <div class="decision-card">
+        <div class="decision-num">#1 Dashboard</div>
+        <div class="decision-q">Which dashboard tooling to start with?</div>
+        <div class="decision-rec">✅ <span>Grafana (Phase 1) → ReportPortal (Phase 2)</span></div>
+      </div>
+      <div class="decision-card">
+        <div class="decision-num">#2 Test Case Management</div>
+        <div class="decision-q">Use Xray / Zephyr in Jira or just labels?</div>
+        <div class="decision-rec">✅ <span>Labels only to start — zero cost, zero setup</span></div>
+      </div>
+      <div class="decision-card">
+        <div class="decision-num">#3 Hosting</div>
+        <div class="decision-q">Where to host DB + Dashboard?</div>
+        <div class="decision-rec">✅ <span>Small VPS (€10–15/mo) — full control</span></div>
+      </div>
+      <div class="decision-card">
+        <div class="decision-num">#4 AI Provider</div>
+        <div class="decision-q">Which AI model and provider?</div>
+        <div class="decision-rec">✅ <span>Claude Sonnet (triage) + Claude Opus (generation)</span></div>
+      </div>
+      <div class="decision-card">
+        <div class="decision-num">#5 Repository Structure</div>
+        <div class="decision-q">Mono-repo or separate repos per shop?</div>
+        <div class="decision-rec">✅ <span>Mono-repo — shared reporters, helpers, AI layer</span></div>
+      </div>
+      <div class="decision-card">
+        <div class="decision-num">#6 Production Test Data</div>
+        <div class="decision-q">How to handle production test accounts?</div>
+        <div class="decision-rec">✅ <span>Dedicated read-only accounts per shop</span></div>
+      </div>
+      <div class="decision-card">
+        <div class="decision-num">#7 Artifact Storage</div>
+        <div class="decision-q">Where to store screenshots / traces / videos?</div>
+        <div class="decision-rec">✅ <span>Bitbucket artifacts short-term → S3 long-term</span></div>
+      </div>
+      <div class="decision-card">
+        <div class="decision-num">#8 AI Approval Gate</div>
+        <div class="decision-q">Who acts on AI suggestions?</div>
+        <div class="decision-rec">✅ <span>QA manually reviews before any action is taken</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>QA Automation Platform Plan — <strong>Playwright + Claude AI + Bitbucket + Jira</strong></p>
+  <p style="margin-top:0.4rem">Generated February 2026 — open <a href="README.md" style="color:var(--accent)">README.md</a> for full technical detail</p>
+</footer>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    themeVariables: {
+      primaryColor: '#6c63ff',
+      primaryTextColor: '#e8eaf6',
+      primaryBorderColor: '#2e3250',
+      lineColor: '#8890b5',
+      secondaryColor: '#1a1d27',
+      tertiaryColor: '#22263a',
+      background: '#1a1d27',
+      mainBkg: '#1a1d27',
+      nodeBorder: '#2e3250',
+      clusterBkg: '#22263a',
+      titleColor: '#e8eaf6',
+      edgeLabelBackground: '#22263a',
+      fontFamily: 'Segoe UI, system-ui, sans-serif',
+    },
+    flowchart: { curve: 'basis', padding: 20 },
+    sequence: { actorMargin: 60 },
+  });
+</script>
+</body>
+</html>
